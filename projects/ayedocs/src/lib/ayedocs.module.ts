@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core';
-import { AyedocsComponent } from './ayedocs.component';
-
-
 
 @NgModule({
-  declarations: [AyedocsComponent],
+  declarations: [],
   imports: [
   ],
-  exports: [AyedocsComponent]
+  exports: []
 })
 export class AyedocsModule { }

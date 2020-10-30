@@ -1,6 +1,22 @@
 {
-  "name": "ayedocs",
-  "version": "0.0.1",
+  "name": "@lamnhan/ayedocs-angular",
+  "version": "1.0.0",
+  "description": "A client for displaying Ayedocs documentation in Angular apps.",
+  "author": "Lam Nhan",
+  "homepage": "https://lamnhan.com",
+  "license": "MIT",
+  "keywords": [
+    "ayedocs",
+    "typescript",
+    "documentation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lamnhan/ayedocs-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lamnhan/ayedocs-angular/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^10.1.6",
     "@angular/core": "^10.1.6"

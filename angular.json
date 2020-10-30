@@ -128,7 +128,7 @@
       "projectType": "library",
       "root": "projects/ayedocs",
       "sourceRoot": "projects/ayedocs/src",
-      "prefix": "lib",
+      "prefix": "ayedocs",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",

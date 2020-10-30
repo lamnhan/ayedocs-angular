@@ -1,15 +1,33 @@
 {
-  "name": "ayedocs-angular",
+  "name": "@lamnhan/ayedocs-angular",
   "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
-  },
+  "description": "A client for displaying Ayedocs documentation in Angular apps.",
+  "author": "Lam Nhan",
+  "homepage": "https://lamnhan.com",
+  "license": "MIT",
   "private": true,
+  "scripts": {
+    "build": "cpx README.md \"projects/ayedocs\" && ng build ayedocs --prod",
+    "deploy": "cd ./dist/ayedocs && npm publish && cd ../../",
+    "docs": "ayedocs generate",
+    "test": "ng test ayedocs",
+    "e2e": "ng e2e ayedocs",
+    "coverage": "cat ./coverage/*/lcov.info | coveralls",
+    "lint": "ng lint ayedocs",
+    "webdriver-update-ci": "webdriver-manager update --standalone false --gecko false --versions.chrome 2.37"
+  },
+  "keywords": [
+    "ayedocs",
+    "typescript",
+    "documentation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lamnhan/ayedocs-angular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lamnhan/ayedocs-angular/issues"
+  },
   "dependencies": {
     "@angular/animations": "~10.1.5",
     "@angular/common": "~10.1.5",
@@ -31,6 +49,8 @@
     "@types/jasmine": "~3.5.0",
     "@types/jasminewd2": "~2.0.3",
     "codelyzer": "^6.0.0",
+    "coveralls": "^3.1.0",
+    "cpx": "^1.5.0",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~5.0.0",
     "karma": "~5.0.0",
