@@ -123,6 +123,50 @@
           }
         }
       }
-    }},
-  "defaultProject": "ayedocs-angular"
+    },
+    "ayedocs": {
+      "projectType": "library",
+      "root": "projects/ayedocs",
+      "sourceRoot": "projects/ayedocs/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/ayedocs/tsconfig.lib.json",
+            "project": "projects/ayedocs/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/ayedocs/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ayedocs/src/test.ts",
+            "tsConfig": "projects/ayedocs/tsconfig.spec.json",
+            "karmaConfig": "projects/ayedocs/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ayedocs/tsconfig.lib.json",
+              "projects/ayedocs/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "ayedocs-angular",
+  "cli": {
+    "analytics": "d33be21a-94a9-4296-a5c4-18b419babb36"
+  }
 }
