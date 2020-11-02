@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
+import { FullComponent } from './full/full.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [FullComponent],
   imports: [
   ],
   exports: []

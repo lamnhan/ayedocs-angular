@@ -3,3 +3,4 @@
  */
 
 export * from './lib/ayedocs.module';
+export * from './lib/ayedocs.service';

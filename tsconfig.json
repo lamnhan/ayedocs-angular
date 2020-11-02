@@ -16,7 +16,7 @@
       "dom"
     ],
     "paths": {
-      "ayedocs": [
+      "@lamnhan/ayedocs-angular": [
         "dist/ayedocs/ayedocs",
         "dist/ayedocs"
       ]
