@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { AyedocsService } from '@lamnhan/ayedocs-angular';
+import { AyedocsService, DocsApiComponentInput } from '@lamnhan/ayedocs-angular';
 
 @Component({
   selector: 'app-single',
@@ -8,12 +8,14 @@ import { AyedocsService } from '@lamnhan/ayedocs-angular';
   styleUrls: ['./single.component.scss']
 })
 export class SingleComponent implements OnInit {
-
-  private ayedocs: undefined | AyedocsService;
+  ayedocsData: undefined | DocsApiComponentInput;
 
   constructor(private ayedocsService: AyedocsService) { }
 
   ngOnInit(): void {
+    this.ayedocsService
+      .load('lamnhan/ayedocs')
+      .getData()
+      .subscribe(data => this.ayedocsData = data);
   }
-
 }

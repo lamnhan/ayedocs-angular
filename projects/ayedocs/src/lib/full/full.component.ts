@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import {AyedocsService} from '../ayedocs.service';
+import {DocsApiComponentInput} from '../ayedocs.service';
 
 @Component({
   selector: 'ayedocs-full',
@@ -8,9 +8,7 @@ import {AyedocsService} from '../ayedocs.service';
   styleUrls: ['./full.component.scss']
 })
 export class FullComponent {
-
-  @Input() service: AyedocsService;
+  @Input() data: undefined | DocsApiComponentInput;
 
   constructor() { }
-
 }
