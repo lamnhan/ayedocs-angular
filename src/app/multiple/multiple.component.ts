@@ -1,15 +1,29 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { AyedocsService } from '@lamnhan/ayedocs-angular';
 
 @Component({
   selector: 'app-multiple',
   templateUrl: './multiple.component.html',
-  styleUrls: ['./multiple.component.scss']
+  styleUrls: ['./multiple.component.scss'],
+  providers: [
+    AyedocsService
+  ]
 })
-export class MultipleComponent implements OnInit {
+export class MultipleComponent  implements OnInit {
+  ayedocs: AyedocsService;
 
-  constructor() { }
+  constructor(
+    private ayedocsService: AyedocsService,
+    public route: ActivatedRoute
+  ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.ayedocs = this.ayedocsService
+      .initialize([
+        'lamnhan/seminjecto',
+        'lamnhan/ayedocs',
+      ]);
   }
-
 }

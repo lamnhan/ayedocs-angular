@@ -1,21 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
-import { AyedocsService, DocsApiComponentInput } from '@lamnhan/ayedocs-angular';
+import { AyedocsService } from '@lamnhan/ayedocs-angular';
 
 @Component({
   selector: 'app-single',
   templateUrl: './single.component.html',
-  styleUrls: ['./single.component.scss']
+  styleUrls: ['./single.component.scss'],
+  providers: [
+    AyedocsService
+  ]
 })
 export class SingleComponent implements OnInit {
-  ayedocsData: undefined | DocsApiComponentInput;
+  ayedocs: AyedocsService;
 
-  constructor(private ayedocsService: AyedocsService) { }
+  constructor(
+    private ayedocsService: AyedocsService,
+    public route: ActivatedRoute
+  ) { }
 
-  ngOnInit(): void {
-    this.ayedocsService
-      .load('lamnhan/ayedocs')
-      .getData()
-      .subscribe(data => this.ayedocsData = data);
+  ngOnInit() {
+    this.ayedocs = this.ayedocsService.initialize('lamnhan/ayedocs');
   }
 }

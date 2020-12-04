@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 export type DocsApiTypes = 'file' | 'web';
 
@@ -7,21 +7,25 @@ export interface DocsApiMenuItem {
   title: string;
   level: number;
   type: DocsApiTypes;
+  slug: string;
+  ext: string;
+  fragment?: string;
   articleId?: string;
-  anchor?: string;
 }
 
 export interface DocsApiArticle {
   title: string;
   src: string;
   type: DocsApiTypes;
+  ext: string;
+  slug: string;
   originalSrc?: string;
   content?: string;
 }
 
 export interface DocsApiResponse {
-  originalUrl: string;
-  menu: DocsApiMenuItem[];
+  docsUrl: string;
+  recordMenu: Record<string, DocsApiMenuItem>;
   recordArticles: Record<string, DocsApiArticle>;
 }
 
@@ -31,98 +35,203 @@ export interface DocsApiMember {
   url: string;
   logo?: string;
   image?: string;
+  docsModifier?: true | DocsApiBuiltinModification | DocsApiDocsModifier;
+  contentModifier?: true | DocsApiContentModifier;
 }
 
-export interface DocsApiLoadOptions {
-  proxy?: string;
+export interface DocsApiOptions {
+  corsProxy?: boolean | string;
+  frontpage?: 'first' | string;
 }
 
-export interface DocsApiBuiltinFilter {
+export interface DocsApiBuiltinModification {
   onlyType?: DocsApiTypes;
+  noExt?: true;
 }
 
-export type DocsApiAdvancedFilter = (response: DocsApiResponse) => DocsApiResponse;
+export type DocsApiDocsModifier = (response: DocsApiResponse) => DocsApiResponse;
 
-export type DocsApiModifier = (response: DocsApiResponse) => DocsApiResponse;
+export type DocsApiContentModifier = (content: string, url: string) => string;
 
 export type DocsApiComponentItem = DocsApiMember & Partial<DocsApiResponse>;
 
-export interface DocsApiComponentInput {
-  active?: string;
-  recordItems?: Record<string, DocsApiComponentItem>;
-}
+export type DocsApiComponentRecordItems = Record<string, DocsApiComponentItem>;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AyedocsService {
-  private options: DocsApiLoadOptions = {};
-  private members: DocsApiMember[] = [];
+  private options: DocsApiOptions = {};
+  private recordMembers: Record<string, DocsApiMember> = {};
+  private recordParts: Record<string, DocsApiComponentItem> = {};
 
-  constructor() { }
+  constructor() {}
 
-  load(
-    input: string | string[] | DocsApiMember[],
-    options: DocsApiLoadOptions = {}
+  getOptions() {
+    return this.options;
+  }
+
+  private async httpFetchWithCorsProxy(url: string, isJson = true) {
+    const proxyUrls = typeof this.options.corsProxy === 'string'
+      ? [this.options.corsProxy]
+      : this.options.corsProxy === true
+      ? [
+          'https://cors-anywhere.herokuapp.com/',
+          'https://api.codetabs.com/v1/proxy?quest=',
+          'https://api.allorigins.win/get?url='
+        ]
+      : [''];
+    // fetcher
+    const fetching = async (): Promise<Response> => {
+      const response = await fetch((proxyUrls.shift() || '') + url, {method: 'get'});
+      if (!response.ok) {
+        if (proxyUrls.length) {
+          return fetching();
+        } else {
+          throw new Error('Fetch failed!');
+        }
+      } else {
+        return response;
+      }
+    };
+    // fetch
+    const response = await fetching();
+    return isJson
+      ? response.json()
+      : response.text();
+  }
+
+  private async httpFetch(url: string, isJson = true) {
+    const response = await fetch(url, {method: 'get'});
+    if (!response.ok) {
+      throw new Error('Fetch failed!');
+    }
+    return isJson
+      ? response.json()
+      : response.text();
+  }
+
+  private async fetchDocs(
+    url: string,
+    modifier?: true | DocsApiBuiltinModification | DocsApiDocsModifier
   ) {
-    let members: DocsApiMember[] = [];
+    // fetch data
+    const response = await this.httpFetch(url) as unknown as DocsApiResponse;
+    // modifier
+    if (modifier && !(modifier instanceof Function)) {
+      modifier = this.getBuiltinModifier();
+    } else if (modifier === true) {
+      modifier = this.getDefaultDocsModifier();
+    }
+    // result
+    return modifier instanceof Function
+      ? modifier(response)
+      : response;
+  }
+
+  private async fetchContent(
+    url: string,
+    modifier?: true | DocsApiContentModifier
+  ) {
+    // fetch content
+    const content = await this.httpFetch(url, false) as string;
+    // modifier
+    if (modifier === true) {
+      modifier = this.getDefaultContentModifier();
+    }
+    // result
+    return modifier instanceof Function
+      ? modifier(content, url)
+      : content;
+  }
+
+  initialize(
+    input: string | string[] | DocsApiMember[],
+    options: DocsApiOptions = {}
+  ) {
+    const recordMembers: Record<string, DocsApiMember> = {};
     if (typeof input === 'string') {
       const member = this.processStrInput(input);
-      members = [member];
+      recordMembers[member.id] = member;
     } else if (typeof input[0] === 'string') {
-      members = (input as string[]).map(ipt => this.processStrInput(ipt));
+      (input as string[]).forEach(ipt => {
+        const member = this.processStrInput(ipt);
+        recordMembers[member.id] = member;
+      });
     } else {
-      members = input as DocsApiMember[];
+      const members = input as DocsApiMember[];
+      members.forEach(member => recordMembers[member.id] = member);
     }
     // logo, image
-    members.forEach(member => {
-      if (!member.logo) {
-        member.logo = 'https://img.icons8.com/material-outlined/48/000000/document.png'
-      }
-      if (!member.image) {
-        member.image = 'https://source.unsplash.com/UiiHVEyxtyA/480x360'
-      }
-    });
-    // done
+    for (const id of Object.keys(recordMembers)) {
+      recordMembers[id].logo =
+        recordMembers[id].logo ||
+        'https://img.icons8.com/material-outlined/48/000000/document.png';
+      recordMembers[id].image =
+        recordMembers[id].image ||
+        'https://source.unsplash.com/UiiHVEyxtyA/480x360';
+    }
+    // set values
     this.options = options;
-    this.members = members;
+    this.recordMembers = recordMembers;
+    // return the service
     return this;
   }
 
-  getData(
-    active?: string,
-    filter?: DocsApiBuiltinFilter | DocsApiAdvancedFilter,
-    modifier?: true | DocsApiModifier
-  ) {
-    const {
-      proxy = 'https://cors-anywhere.herokuapp.com/'
-    } = this.options;
-    // build initial items
-    const recordItems: Record<string, DocsApiComponentItem> = {};
-    this.members.forEach(member => recordItems[member.id] = {...member});
-    // return anytime data loaded
-    const result: DocsApiComponentInput = {active, recordItems};
-    return new Observable<DocsApiComponentInput>(observer =>
-      this.members.forEach(member =>
-        this.fetch(member.url, {}, proxy)
-          .then(response => {
-            const {
-              originalUrl,
-              menu,
-              recordArticles
-            } = this.processResponse(response, filter, modifier);
-            // set data
-            result.recordItems[member.id].originalUrl = originalUrl;
-            result.recordItems[member.id].menu = menu;
-            result.recordItems[member.id].recordArticles = recordArticles;
-            // result
-            observer.next(result);
-          })
-          .catch(() => observer.next(result))
-      )
-    );
+  getDocs() {
+    return new Observable<DocsApiComponentRecordItems>(observer => {
+      if (Object.keys(this.recordParts).length !== 0) {
+        observer.next(this.recordParts);
+      } else {
+        const memberIds = [] as string[];
+        const docsGetters = [] as Array<Promise<DocsApiResponse>>;
+        for (const id of Object.keys(this.recordMembers)) {
+          const member = this.recordMembers[id];
+          // init & save ids
+          memberIds.push(id);
+          this.recordParts[id] = {...member};
+          // save getters
+          docsGetters.push(this.fetchDocs(member.url, member.docsModifier));
+        }
+        // load data
+        Promise.all(docsGetters)
+          .then(result => {
+            result.forEach((response, i) => {
+              this.recordParts[memberIds[i]].docsUrl = response.docsUrl;
+              this.recordParts[memberIds[i]].recordMenu = response.recordMenu;
+              this.recordParts[memberIds[i]].recordArticles = response.recordArticles;
+            });
+            observer.next(this.recordParts);
+          });
+      }
+    });
   }
 
+  getContent(url: string, modifier?: true | DocsApiContentModifier) {
+    return from(this.fetchContent(url, modifier));
+  }
+
+  private getBuiltinModifier() {
+    return ((response: DocsApiResponse) => {
+      // TODO: add filter modifier
+      return response;
+    }) as DocsApiDocsModifier;
+  }
+
+  private getDefaultDocsModifier() {
+    return ((response: DocsApiResponse) => {
+      // TODO: add builtin modifier
+      return response;
+    }) as DocsApiDocsModifier;
+  }
+
+  private getDefaultContentModifier() {
+    return ((content: string, url: string) => {
+      // TODO: add content modifier
+      return content;
+    }) as DocsApiContentModifier;
+  }
+ 
   private processStrInput(input: string) {
     let id: string;
     let title: string;
@@ -139,57 +248,8 @@ export class AyedocsService {
       const [org, repo] = input.replace('@', '').replace(/ /g, '').split('/');
       id = `${org}_${repo}`;
       title = `@${org}/${repo}`;
-      url = `https://${org}.github.io/${repo}/api/articles.json`;
+      url = `https://raw.githubusercontent.com/${org}/${repo}/master/docs/api/articles.json`;
     }
     return {id, title, url} as DocsApiMember;
-  }
-
-  private processResponse(
-    response: DocsApiResponse,
-    customFilter?: DocsApiBuiltinFilter | DocsApiAdvancedFilter,
-    customModifier?: true | DocsApiModifier
-  ) {
-    // filterer
-    let filterer: DocsApiAdvancedFilter;
-    if (customFilter instanceof Function) {
-      filterer = customFilter;
-    } else if (customFilter) {
-      filterer = this.getBuiltinFilterer();
-    } else {
-      filterer = (res: DocsApiResponse) => res;
-    }
-    // modifier
-    let modifier: DocsApiModifier;
-    if (customModifier instanceof Function) {
-      modifier = customModifier;
-    } else if (customModifier) {
-      modifier = this.getBuiltinModifier();
-    } else {
-      modifier = (res: DocsApiResponse) => res;
-    }
-    // result
-    return modifier(filterer(response));
-  }
-
-  private getBuiltinFilterer() {
-    return ((response: DocsApiResponse) => {
-      // TODO: add builtin filter
-      return response;
-    }) as DocsApiAdvancedFilter;
-  }
-
-  private getBuiltinModifier() {
-    return ((response: DocsApiResponse) => {
-      // TODO: add builtin modifier
-      return response;
-    }) as DocsApiModifier;
-  }
-
-  private async fetch(input: RequestInfo, init: RequestInit = {}, proxyUrl = '') {
-    const response = await fetch(proxyUrl + input, {...init, method: 'get'});
-    if (!response.ok) {
-      throw new Error('Fetch failed!');
-    }
-    return response.json() as unknown as DocsApiResponse;
   }
 }

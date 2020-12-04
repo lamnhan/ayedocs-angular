@@ -1,17 +1,44 @@
-<div *ngIf="data" class="container">
+<div class="container" *ngIf="recordParts; else loadingElse">
 
   <div class="menu">
     <ul class="members">
-      <li class="member">
-        Menu ...
+      <li class="member" *ngFor="let part of recordParts | o2a">
+        <div class="head">
+          <div class="logo"><img [src]="part.logo"></div>
+          <div class="title"><span>{{part.title}}</span></div>
+        </div>
+        <ul class="body">
+          <li
+            *ngFor="let menuItem of part.recordMenu | o2a"
+            [class]="'level-' + menuItem.level"
+          >
+            <a
+              *ngIf="menuItem.articleId; else noArticleElse"
+              href="javascript:void(0)"
+              (click)="selectArticle(part.id, menuItem)"
+            >{{menuItem.title}}</a>
+            <ng-template #noArticleElse><span>{{menuItem.title}}</span></ng-template>
+          </li>
+        </ul>
       </li>
     </ul>
   </div>
 
-  <div class="content">
-    <h1>Content ...</h1>
+  <div class="article" *ngIf="article; else frontpageElse">
+    <div class="title">
+      <h1>{{article.title}}</h1>
+    </div>
+    <div class="content">
+      <markdown [data]="content" (ready)="contentReady()"></markdown>
+    </div>
   </div>
+  <ng-template #frontpageElse>
+    <div class="frontpage">
+      <markdown [data]="content"></markdown>
+    </div>
+  </ng-template>
+  
 
 </div>
 
-<div *ngElse class="loading">loading ...</div>
+<ng-template #loadingElse><div class="loading">loading ...</div></ng-template>

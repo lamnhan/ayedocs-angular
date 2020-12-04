@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AyedocsModule, AyedocsService } from '@lamnhan/ayedocs-angular';
+import { AyedocsModule } from '@lamnhan/ayedocs-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -21,9 +21,7 @@ import { MultipleComponent } from './multiple/multiple.component';
     AppRoutingModule,
     AyedocsModule,
   ],
-  providers: [
-    AyedocsService,
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
