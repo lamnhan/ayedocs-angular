@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import {
@@ -29,7 +30,7 @@ export class FullComponent implements OnInit {
   content: undefined | string;
   fragment: undefined | string;
 
-  constructor(private router: Router) {}
+  constructor(private location: Location, private router: Router) {}
 
   ngOnInit() {
     const recordPartsSubscription = this.service
@@ -37,23 +38,16 @@ export class FullComponent implements OnInit {
       .subscribe(value => {
         this.recordParts = value;
         const {initial, redirect} = this.getInitialData();
-        console.log('parts: ', this.recordParts);
-        console.log('is initial: ', initial);
-        console.log('is redirect: ', redirect);
         if (initial) {
           this.selectArticle(initial.partId, initial.menuItem);
         } else if (redirect) {
           // cancel subscription
           recordPartsSubscription.unsubscribe();
-          // proccess paths
-          const redirectPaths = [] as string[];
-          redirectPaths.push(this.path || '/docs');
-          if (redirect.partId) {
-            redirectPaths.push(redirect.partId);
-          }
-          redirectPaths.push(redirect.itemId);
           // go to
-          this.router.navigate(redirectPaths, {fragment: redirect.fragment});
+          this.router.navigate(
+            this.getLocation(redirect.partId, redirect.itemId) as string[],
+            {fragment: redirect.fragment}
+          );
         } else {
           this.getFrontpageContent()
             .then(content => this.content = content);
@@ -90,6 +84,13 @@ export class FullComponent implements OnInit {
           }
         }
       }
+      // set location
+      const currentLocation = this.getLocation(
+        menuItem.articleId,
+        Object.keys(this.recordParts).length === 1 ? undefined : partId,
+        true
+      ) as string;
+      this.location.go(currentLocation + (menuItem.fragment ? '#' + menuItem.fragment : ''));
     }
   }
 
@@ -173,5 +174,15 @@ export class FullComponent implements OnInit {
 
   private gotoFragment(fragment: string) {
     console.log('scroll to #', fragment);
+  }
+
+  private getLocation(itemId: string, partId?: string, asString = false) {
+    const redirectPaths = [] as string[];
+    redirectPaths.push(this.path || '/docs');
+    if (partId) {
+      redirectPaths.push(partId);
+    }
+    redirectPaths.push(itemId);
+    return asString ? redirectPaths.join('/') : redirectPaths;
   }
 }
