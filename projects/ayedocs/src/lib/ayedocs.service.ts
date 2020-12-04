@@ -40,7 +40,6 @@ export interface DocsApiMember {
 }
 
 export interface DocsApiOptions {
-  corsProxy?: boolean | string;
   frontpage?: 'first' | string;
 }
 
@@ -69,36 +68,6 @@ export class AyedocsService {
 
   getOptions() {
     return this.options;
-  }
-
-  private async httpFetchWithCorsProxy(url: string, isJson = true) {
-    const proxyUrls = typeof this.options.corsProxy === 'string'
-      ? [this.options.corsProxy]
-      : this.options.corsProxy === true
-      ? [
-          'https://cors-anywhere.herokuapp.com/',
-          'https://api.codetabs.com/v1/proxy?quest=',
-          'https://api.allorigins.win/get?url='
-        ]
-      : [''];
-    // fetcher
-    const fetching = async (): Promise<Response> => {
-      const response = await fetch((proxyUrls.shift() || '') + url, {method: 'get'});
-      if (!response.ok) {
-        if (proxyUrls.length) {
-          return fetching();
-        } else {
-          throw new Error('Fetch failed!');
-        }
-      } else {
-        return response;
-      }
-    };
-    // fetch
-    const response = await fetching();
-    return isJson
-      ? response.json()
-      : response.text();
   }
 
   private async httpFetch(url: string, isJson = true) {
