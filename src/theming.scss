@@ -1,0 +1,63 @@
+$types: (
+    head: #{'Poppins', sans-serif},
+    body: #{'Roboto', sans-serif},
+);
+
+$sizes: (
+    base: 16px,
+    radius: 5px,
+    border: 1px,
+);
+
+$colors: (
+    primary: #3880ff,
+    secondary: #3dc2ff,
+    tertiary: #5260ff,
+    info: #5260ff,
+    success:#2dd36f,
+    warning: #ffc409,
+    danger: #eb445a,
+    dark: #222428,
+    medium: #92949c,
+    muted: #92949c,
+    light: #f4f5f8,
+);
+
+$gradients: (
+    primary: linear-gradient(
+        120deg, map-get($colors, primary), darken(map-get($colors, primary), 30)
+    ),
+    secondary: linear-gradient(
+        120deg, map-get($colors, secondary), darken(map-get($colors, secondary), 30)
+    ),
+    tertiary: linear-gradient(
+        120deg, map-get($colors, tertiary), darken(map-get($colors, tertiary), 30)
+    ),
+    info: linear-gradient(
+        120deg, map-get($colors, info), darken(map-get($colors, info), 30)
+    ),
+    success: linear-gradient(
+        120deg, map-get($colors, success), darken(map-get($colors, success), 30)
+    ),
+    warning: linear-gradient(
+        120deg, map-get($colors, warning), darken(map-get($colors, warning), 30)
+    ),
+    danger: linear-gradient(
+        120deg, map-get($colors, danger), darken(map-get($colors, danger), 30)
+    ),
+    dark: linear-gradient(
+        120deg, map-get($colors, dark), darken(map-get($colors, dark), 30)
+    ),
+    medium: linear-gradient(
+        120deg, map-get($colors, medium), darken(map-get($colors, medium), 30)
+    ),
+    muted: linear-gradient(
+        120deg, map-get($colors, muted), darken(map-get($colors, muted), 30)
+    ),
+    light: linear-gradient(
+        120deg, map-get($colors, light), darken(map-get($colors, light), 30)
+    ),
+);
+
+// unistylus
+@import '../projects/ayedocs/src/unistylus/index.scss';

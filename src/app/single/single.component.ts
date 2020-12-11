@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AyedocsService } from '@lamnhan/ayedocs-angular';
@@ -9,7 +9,8 @@ import { AyedocsService } from '@lamnhan/ayedocs-angular';
   styleUrls: ['./single.component.scss'],
   providers: [
     AyedocsService
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SingleComponent implements OnInit {
   ayedocs: AyedocsService;
@@ -20,6 +21,6 @@ export class SingleComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.ayedocs = this.ayedocsService.initialize('lamnhan/ayedocs');
+    this.ayedocs = this.ayedocsService.initialize('lamnhan/ayedocs', {path: 'single'});
   }
 }

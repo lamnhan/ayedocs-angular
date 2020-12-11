@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MarkdownService } from 'ngx-markdown';
 
 import {
   AyedocsService,
@@ -8,15 +9,15 @@ import {
   DocsApiComponentRecordItems,
   DocsApiMenuItem,
   DocsApiArticle
-} from '../ayedocs.service';
+} from '../../services/ayedocs/ayedocs.service';
 
 @Component({
-  selector: 'ayedocs-full',
-  templateUrl: './full.component.html',
-  styleUrls: ['./full.component.scss']
+  selector: 'ayedocs-full-raw',
+  templateUrl: './full-raw.component.html',
+  styleUrls: ['./full-raw.component.scss']
 })
-export class FullComponent implements OnInit {
-  @Input() path: undefined | string;
+export class FullRawComponent implements OnInit {
+
   @Input() service: undefined | AyedocsService;
   @Input() route: undefined | ActivatedRoute;
 
@@ -30,7 +31,11 @@ export class FullComponent implements OnInit {
   content: undefined | string;
   fragment: undefined | string;
 
-  constructor(private location: Location, private router: Router) {}
+  constructor(
+    private location: Location,
+    private router: Router,
+    private markdownService: MarkdownService
+  ) {}
 
   ngOnInit() {
     const recordPartsSubscription = this.service
@@ -95,10 +100,13 @@ export class FullComponent implements OnInit {
   }
 
   contentReady() {
-    console.log('content ready ...');
     if (this.fragment) {
       this.gotoFragment(this.fragment);
     }
+  }
+
+  md2Html(md: string) {
+    return this.markdownService.compile(md);
   }
 
   private getInitialData() {
@@ -173,16 +181,19 @@ export class FullComponent implements OnInit {
   }
 
   private gotoFragment(fragment: string) {
-    console.log('scroll to #', fragment);
+    const elm = document.getElementById(fragment);
+    console.log('scroll to #', fragment, elm);
   }
 
   private getLocation(itemId: string, partId?: string, asString = false) {
+    const {path = '/docs'} = this.service.getOptions();
     const redirectPaths = [] as string[];
-    redirectPaths.push(this.path || '/docs');
+    redirectPaths.push(path);
     if (partId) {
       redirectPaths.push(partId);
     }
     redirectPaths.push(itemId);
     return asString ? redirectPaths.join('/') : redirectPaths;
   }
+
 }

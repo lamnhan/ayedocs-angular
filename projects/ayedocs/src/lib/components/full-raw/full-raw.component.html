@@ -16,7 +16,8 @@
               *ngIf="menuItem.articleId; else noArticleElse"
               href="javascript:void(0)"
               (click)="selectArticle(part.id, menuItem)"
-            >{{menuItem.title}}</a>
+              [innerHtml]="md2Html(menuItem.title)"
+            ></a>
             <ng-template #noArticleElse><span>{{menuItem.title}}</span></ng-template>
           </li>
         </ul>
@@ -26,17 +27,17 @@
 
   <div class="article" *ngIf="article; else frontpageElse">
     <div class="title">
-      <h1>{{article.title}}</h1>
+      <h1 [innerHtml]="md2Html(article.title)"></h1>
     </div>
-    <div class="content">
+    <article class="content">
       <markdown [data]="content" (ready)="contentReady()"></markdown>
-    </div>
+    </article>
+    <ng-template #frontpageElse>
+      <article class="frontpage">
+        <markdown [data]="content"></markdown>
+      </article>
+    </ng-template>
   </div>
-  <ng-template #frontpageElse>
-    <div class="frontpage">
-      <markdown [data]="content"></markdown>
-    </div>
-  </ng-template>
   
 
 </div>

@@ -39,8 +39,15 @@ export interface DocsApiMember {
   contentModifier?: true | DocsApiContentModifier;
 }
 
+export interface GlobalDocs {
+  recordMenu: Record<string, DocsApiMenuItem>;
+  recordArticles: Record<string, DocsApiArticle>;
+}
+
 export interface DocsApiOptions {
+  path?: string;
   frontpage?: 'first' | string;
+  globalDocs?: string | GlobalDocs;
 }
 
 export interface DocsApiBuiltinModification {

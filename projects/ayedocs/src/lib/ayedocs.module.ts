@@ -12,11 +12,12 @@ import 'prismjs/components/prism-markdown.min.js';
 import 'prismjs/components/prism-json.min.js';
 import 'prismjs/plugins/line-numbers/prism-line-numbers.min.js';
 
-import { FullComponent } from './full/full.component';
-import { O2aPipe } from './o2a/o2a.pipe';
+import { FullRawComponent } from './components/full-raw/full-raw.component';
+import { FullComponent } from './components/full/full.component';
+import { O2aPipe } from './pipes/o2a/o2a.pipe';
 
 @NgModule({
-  declarations: [FullComponent, O2aPipe],
+  declarations: [FullRawComponent, FullComponent, O2aPipe],
   imports: [
     CommonModule,
     MarkdownModule,
@@ -25,10 +26,11 @@ import { O2aPipe } from './o2a/o2a.pipe';
     MarkdownService,
     {
       provide: SECURITY_CONTEXT,
-      useValue: SecurityContext.HTML
+      useValue: SecurityContext.NONE
     }
   ],
   exports: [
+    FullRawComponent,
     FullComponent,
     O2aPipe,
   ]

@@ -1,0 +1,7 @@
+@import '../../../../../../src/theming.scss';
+
+@import '../../styles/ayedocs-full.scss';
+
+ayedocs-full ayedocs-full-raw {
+  @include ayedocs-full-styles;
+}

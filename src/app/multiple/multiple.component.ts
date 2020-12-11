@@ -21,9 +21,14 @@ export class MultipleComponent  implements OnInit {
 
   ngOnInit() {
     this.ayedocs = this.ayedocsService
-      .initialize([
-        'lamnhan/seminjecto',
-        'lamnhan/ayedocs',
-      ]);
+      .initialize(
+        [
+          'lamnhan/seminjecto',
+          'lamnhan/ayedocs',
+        ],
+        {
+          path: 'multiple'
+        },
+      );
   }
 }

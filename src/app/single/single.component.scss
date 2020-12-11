@@ -1,0 +1,11 @@
+@import '../../theming.scss';
+
+@import '../../../projects/ayedocs/src/lib/styles/ayedocs-full.scss';
+
+app-single {
+
+  ayedocs-full-raw {
+    @include ayedocs-full-styles;
+  }
+}
+
