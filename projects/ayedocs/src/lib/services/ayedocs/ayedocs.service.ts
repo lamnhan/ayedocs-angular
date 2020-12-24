@@ -13,6 +13,13 @@ export interface DocsApiMenuItem {
   articleId?: string;
 }
 
+export interface DocsApiTOCItem {
+  title: string;
+  level: number;
+  id?: string;
+  link?: string;
+}
+
 export interface DocsApiArticle {
   title: string;
   src: string;
@@ -21,10 +28,12 @@ export interface DocsApiArticle {
   slug: string;
   originalSrc?: string;
   content?: string;
+  toc?: DocsApiTOCItem[];
 }
 
 export interface DocsApiResponse {
   docsUrl: string;
+  repoUrl: string;
   recordMenu: Record<string, DocsApiMenuItem>;
   recordArticles: Record<string, DocsApiArticle>;
 }
@@ -142,7 +151,7 @@ export class AyedocsService {
     for (const id of Object.keys(recordMembers)) {
       recordMembers[id].logo =
         recordMembers[id].logo ||
-        'https://img.icons8.com/material-outlined/48/000000/document.png';
+        'https://img.icons8.com/color/48/000000/google-docs--v2.png';
       recordMembers[id].image =
         recordMembers[id].image ||
         'https://source.unsplash.com/UiiHVEyxtyA/480x360';
@@ -174,6 +183,7 @@ export class AyedocsService {
           .then(result => {
             result.forEach((response, i) => {
               this.recordParts[memberIds[i]].docsUrl = response.docsUrl;
+              this.recordParts[memberIds[i]].repoUrl = response.repoUrl;
               this.recordParts[memberIds[i]].recordMenu = response.recordMenu;
               this.recordParts[memberIds[i]].recordArticles = response.recordArticles;
             });

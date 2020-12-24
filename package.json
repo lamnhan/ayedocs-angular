@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "cpx README.md \"projects/ayedocs\" && ng build ayedocs --prod",
+    "build": "cpx README.md \"projects/ayedocs\" && ng build ayedocs --prod && cpx \"projects/ayedocs/src/lib/styles/**/*.*\" \"dist/ayedocs/styles\"",
     "deploy": "cd ./dist/ayedocs && npm publish && cd ../../",
     "docs": "ayedocs generate",
     "test": "ng test ayedocs",
@@ -37,6 +37,7 @@
     "@angular/platform-browser": "~10.1.5",
     "@angular/platform-browser-dynamic": "~10.1.5",
     "@angular/router": "~10.1.5",
+    "@lamnhan/unistylus": "0.0.2",
     "ngx-markdown": "^11.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

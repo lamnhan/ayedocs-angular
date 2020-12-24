@@ -3,10 +3,18 @@
   <div class="menu">
     <ul class="members">
       <li class="member" *ngFor="let part of recordParts | o2a">
+
         <div class="head">
-          <div class="logo"><img [src]="part.logo"></div>
-          <div class="title"><span>{{part.title}}</span></div>
+          <div class="logo"><img [src]="part.logo" [alt]="part.title"></div>
+          <div class="title">
+            <strong>{{part.title}}</strong>
+            <div class="links">
+              <a target="_blank" [href]="part.docsUrl">Home</a>
+              <a target="_blank" [href]="part.repoUrl">Code</a>
+            </div>
+          </div>
         </div>
+
         <ul class="body">
           <li
             *ngFor="let menuItem of part.recordMenu | o2a"
@@ -21,24 +29,63 @@
             <ng-template #noArticleElse><span>{{menuItem.title}}</span></ng-template>
           </li>
         </ul>
+
       </li>
     </ul>
   </div>
 
-  <div class="article" *ngIf="article; else frontpageElse">
-    <div class="title">
-      <h1 [innerHtml]="md2Html(article.title)"></h1>
+  <div class="article">
+
+    <div *ngIf="article; else frontpageElse">
+
+      <div class="title">
+        <h1 [innerHtml]="md2Html(article.title)"></h1>
+        <div class="links">
+          <a
+            *ngIf="article.originalSrc"
+            target="_blank"
+            [href]="article.originalSrc">
+            <img src="https://unpkg.com/@mdi/svg@latest/svg/share.svg" />
+          </a>
+        </div>
+      </div>
+
+      <ul
+        class="toc"
+        *ngIf="article.toc"
+      >
+        <li>In this page:</li>
+        <li
+          *ngFor="let tocItem of article.toc"
+          [class]="'level-' + tocItem.level"
+        >
+          <a
+            *ngIf="tocItem.id; else tocLinkElse"
+            href="javascript:void(0)"
+            (click)="selectTOCArticle(tocItem)"
+            [innerHtml]="md2Html(tocItem.title)"></a>
+          <ng-template #tocLinkElse>
+            <a
+              target="_blank"
+              [href]="tocItem.link"
+              [innerHtml]="md2Html(tocItem.title)"></a>
+          </ng-template>          
+        </li>
+      </ul>
+
+      <article class="content">
+        <markdown [data]="content" (ready)="contentReady()"></markdown>
+      </article>
+
     </div>
-    <article class="content">
-      <markdown [data]="content" (ready)="contentReady()"></markdown>
-    </article>
+
     <ng-template #frontpageElse>
       <article class="frontpage">
         <markdown [data]="content"></markdown>
       </article>
     </ng-template>
+
   </div>
-  
 
 </div>
 

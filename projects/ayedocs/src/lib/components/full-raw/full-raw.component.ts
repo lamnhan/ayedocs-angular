@@ -8,6 +8,7 @@ import {
   DocsApiComponentItem,
   DocsApiComponentRecordItems,
   DocsApiMenuItem,
+  DocsApiTOCItem,
   DocsApiArticle
 } from '../../services/ayedocs/ayedocs.service';
 
@@ -60,6 +61,16 @@ export class FullRawComponent implements OnInit {
       });
   }
 
+  contentReady() {
+    if (this.fragment) {
+      this.gotoFragment(this.fragment);
+    }
+  }
+
+  md2Html(md: string) {
+    return this.markdownService.compile(md);
+  }
+
   selectArticle(partId: string, menuItem: DocsApiMenuItem) {
     // must not be a category
     if (menuItem.articleId) {
@@ -90,23 +101,15 @@ export class FullRawComponent implements OnInit {
         }
       }
       // set location
-      const currentLocation = this.getLocation(
-        menuItem.articleId,
-        Object.keys(this.recordParts).length === 1 ? undefined : partId,
-        true
-      ) as string;
-      this.location.go(currentLocation + (menuItem.fragment ? '#' + menuItem.fragment : ''));
+      this.setLocation(partId, menuItem.articleId, menuItem.fragment);
     }
   }
 
-  contentReady() {
-    if (this.fragment) {
-      this.gotoFragment(this.fragment);
-    }
-  }
-
-  md2Html(md: string) {
-    return this.markdownService.compile(md);
+  selectTOCArticle(tocItem: DocsApiTOCItem) {
+    // set location
+    this.setLocation(this.part.id, this.menuItem.articleId, tocItem.id);
+    // go to fragment
+    this.gotoFragment(tocItem.id as string);
   }
 
   private getInitialData() {
@@ -182,7 +185,9 @@ export class FullRawComponent implements OnInit {
 
   private gotoFragment(fragment: string) {
     const elm = document.getElementById(fragment);
-    console.log('scroll to #', fragment, elm);
+    if (elm) {
+      elm.scrollIntoView();
+    }
   }
 
   private getLocation(itemId: string, partId?: string, asString = false) {
@@ -194,6 +199,15 @@ export class FullRawComponent implements OnInit {
     }
     redirectPaths.push(itemId);
     return asString ? redirectPaths.join('/') : redirectPaths;
+  }
+
+  private setLocation(partId: string, articleId: string, fragment?: string) {
+    const currentLocation = this.getLocation(
+      articleId,
+      Object.keys(this.recordParts).length === 1 ? undefined : partId,
+      true
+    ) as string;
+    this.location.go(currentLocation + (fragment ? '#' + fragment : ''));
   }
 
 }

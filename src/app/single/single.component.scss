@@ -1,11 +1,9 @@
 @import '../../theming.scss';
-
-@import '../../../projects/ayedocs/src/lib/styles/ayedocs-full.scss';
+@import '../../../projects/ayedocs/src/lib/styles/full.style.scss';
 
 app-single {
 
   ayedocs-full-raw {
-    @include ayedocs-full-styles;
+    @include ayedocs-full-style;
   }
 }
-

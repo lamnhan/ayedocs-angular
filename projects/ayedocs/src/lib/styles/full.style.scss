@@ -1,0 +1,152 @@
+@mixin ayedocs-full-style {
+
+  .container {
+
+    .menu {
+  
+      .members {
+  
+        .member {
+  
+          .head {}
+  
+          .body {}
+        }
+      }
+    }
+  
+    .article {
+  
+      .title {
+        display: flex;
+        width: 100%;
+  
+        h1 {
+          margin-top: 0;
+          font-size: 2rem;
+          font-weight: bold;
+          
+          p {
+            margin: 0;
+          }
+        }
+  
+        .links {
+          text-align: right;
+          margin-left: 1rem;
+    
+          a {
+            @include button-icon($key: 'medium', $style: 'clear');
+            opacity: .5;
+            min-width: 2.5rem;
+    
+            &:hover {
+              opacity: .7;
+            }
+          }
+        }
+      }
+
+      .toc {
+        padding: 0 2rem;
+        margin: 0 0 2rem 1rem;
+        border-left: 3px solid app-color('medium');
+
+        li:first-child {
+          list-style: none;
+          font-style: italic;
+          color: app-color('dark');
+          margin-left: -1rem;
+        }
+      }
+  
+      article {
+
+        section#toc, section#tocx {
+          display: none;
+        }
+
+        section#head {
+
+          h1 {
+            display: none !important;
+          }
+        }
+
+        section#header {
+
+          img {
+            height: 20px !important;
+            width: auto !important;
+          }
+        }
+  
+        h1 {
+          color: app-color('dark') !important;
+          font-size: 2rem !important;
+          font-weight: bold;
+
+          & + p {
+            font-size: 1.2em !important;
+          }
+        }
+      
+        h2 {
+          color: app-color('dark') !important;
+          font-size: 1.5em !important;
+          padding-top: 1em;
+          margin: 1em 0;
+          font-weight: bold;
+        }
+        
+        h3 {
+          font-size: 1.2em !important;
+          color: app-color('medium') !important;
+          margin: 1em 0;
+        }
+        
+        h4 {
+          font-size: 1em !important;
+          margin: 1em 0;
+        }
+      
+        p, li {
+          color: lighten(map-get($colors, dark), 30) !important;
+          font-size: 1rem !important;
+          line-height: 1.7;
+        }
+      
+        code {
+          background: app-color('light');
+          color: app-color('dark');
+          border-radius: 5px;
+          padding: 5px;
+          font-weight: bold;
+          font-size: .9rem;
+        }
+      
+        pre code {
+          background: none;
+          color: app-color('light');
+          font-weight: normal;
+        }
+
+        hr {
+          display: block;
+          width: auto;
+          height: 1px;
+          border: 0;
+          border-top: 1px solid app-color('medium');
+          margin: 1em 0;
+          padding: 0;
+        }
+      }
+    }
+  
+  }
+  
+  .loading {
+  
+  }
+
+}
