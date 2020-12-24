@@ -151,10 +151,10 @@ export class AyedocsService {
     for (const id of Object.keys(recordMembers)) {
       recordMembers[id].logo =
         recordMembers[id].logo ||
-        'https://img.icons8.com/color/48/000000/google-docs--v2.png';
+        'https://cdn.jsdelivr.net/gh/lamnhan/ayedocs-angular/src/assets/logo.svg';
       recordMembers[id].image =
         recordMembers[id].image ||
-        'https://source.unsplash.com/UiiHVEyxtyA/480x360';
+        'https://cdn.jsdelivr.net/gh/lamnhan/ayedocs-angular/src/assets/cover.jpg';
     }
     // set values
     this.options = options;

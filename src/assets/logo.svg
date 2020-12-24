@@ -1,1 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="550px" height="550px"><rect width="12" height="24" x="18" y="12" fill="#fff"/><path fill="#fbc02d" d="M29,3H19h-7c-1.657,0-3,1.343-3,3v29l5,1l5-1V13h10l1-5L29,3z"/><polygon fill="#4caf50" points="29,45 19,45 18,40 19,35 29,35 30,40"/><path fill="#2e7d32" d="M19,35v10h-7c-1.657,0-3-1.343-3-3v-7H19z"/><polygon fill="#1e88e5" points="39,35 34,36 29,35 29,13 34,12 39,13"/><path fill="#1565c0" d="M29,35h10v7c0,1.657-1.343,3-3,3h-7V35z"/><polygon fill="#e53935" points="39,13 29,13 29,3"/></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 550 550" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1,0,0,2.26684,0,-43.5475)">
+        <rect x="103.125" y="34.375" width="114.583" height="212.3" style="fill:rgb(251,192,45);"/>
+    </g>
+    <rect x="332.292" y="148.958" width="114.583" height="252.083" style="fill:rgb(30,136,229);"/>
+    <g transform="matrix(1,0,0,1.18076,-5.68434e-14,42.0893)">
+        <rect x="217.708" y="304" width="114.583" height="97.042" style="fill:rgb(76,175,80);"/>
+    </g>
+    <g transform="matrix(1,0,0,1.18076,0,-324.577)">
+        <rect x="217.708" y="304" width="114.583" height="97.042" style="fill:rgb(251,192,45);"/>
+    </g>
+    <g transform="matrix(1.38778e-17,1,-1,1.38778e-17,481.25,68.75)">
+        <path d="M446.875,148.958L332.292,148.958L332.292,34.375L446.875,148.958Z" style="fill:rgb(21,101,192);fill-rule:nonzero;"/>
+    </g>
+    <path d="M446.875,148.958L332.292,148.958L332.292,34.375L446.875,148.958Z" style="fill:rgb(229,57,53);fill-rule:nonzero;"/>
+</svg>
