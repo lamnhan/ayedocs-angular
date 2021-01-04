@@ -32,6 +32,9 @@ export class FullRawComponent implements OnInit {
   content: undefined | string;
   fragment: undefined | string;
 
+  // utils
+  mobileMenuExpanded = true;
+
   constructor(
     private location: Location,
     private router: Router,

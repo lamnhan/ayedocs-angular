@@ -1,7 +1,18 @@
 <div class="container" *ngIf="recordParts; else loadingElse">
 
   <div class="menu">
-    <ul class="members">
+    <div class="toggler" (click)="mobileMenuExpanded=!mobileMenuExpanded">
+      <strong>Documentation</strong>
+      <button>
+        <span *ngIf="!mobileMenuExpanded">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAMklEQVRIiWNgGGngPxQTDZho5JBRC0YtGEoWMCKxScpAxJpNcx+QCkaLilELRi0YkQAArMYFIENGFBoAAAAASUVORK5CYII="/>
+        </span>
+        <span *ngIf="mobileMenuExpanded">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAAAJUlEQVRIiWNgGAWjYBSMAoKAEY3/n9rmMlHJwFEwCkbBKKAEAAD0EQEED0po+gAAAABJRU5ErkJggg=="/>
+        </span>
+      </button>
+    </div>
+    <ul [class]="'members' + (mobileMenuExpanded ? ' expanded' : '')">
       <li class="member" *ngFor="let part of recordParts | o2a">
 
         <div class="head">

@@ -1,17 +1,86 @@
 @mixin ayedocs-full-style {
 
   .container {
+    position: relative;
 
     .menu {
+      background: app-color('light');
+      padding: 1rem;
+
+      .toggler {
+        display: flex;
+        padding: 0;
+        
+        strong {
+          flex: 1;
+          align-self: center;
+        }
+        
+        button {
+          align-self: center;
+          outline: none;
+          opacity: .5;
+          border: none;
+          font-size: 2rem;
+          color: app-color('medium');
+          padding: 0;
+          margin: 0;
+          background: none;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
   
       .members {
-  
+        height: 0;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        border-top: 1px solid rgba(0, 0, 0, 0);
+        transition: all .5s ease-in-out;
+
+        &.expanded {
+          height: auto;
+          margin-top: 1rem;
+          padding-top: 1rem;
+          border-top-color: app-color('medium');
+        }
+
         .member {
+          transition: all .5s ease-in-out;
   
           .head {
+            display: flex;
 
-            .logo img {
-              width: 48px;
+            .logo  {
+              align-self: center;
+
+              img {
+                width: 48px;
+              }
+            }
+
+            .title {
+              flex: 1;
+              align-self: center;
+              padding-left: 1rem;
+
+              strong {
+                width: 100%;
+                text-transform: uppercase;
+              }
+
+              .links a {
+                font-size: .9rem;
+                margin-right: 1rem;
+                color: app-color('medium');
+
+                &:hover {
+                  color: app-color('dark');
+                }
+              }
             }
           }
   
@@ -21,6 +90,7 @@
     }
   
     .article {
+      margin-top: 1rem;
   
       .title {
         display: flex;
